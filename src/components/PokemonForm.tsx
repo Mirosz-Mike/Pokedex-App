@@ -73,7 +73,6 @@ const PokemonForm: FunctionComponent<Props> = ({ pokemon, isEditForm }) => {
     let newForm: Form = form;
 
     const correctValidator = { value: '', error: '', isValid: true };
-    const validEditForm = newForm.name.isValid && newForm.hp.isValid && newForm.cp.isValid;
 
     // Validator url
     if (!isEditForm) {
@@ -91,7 +90,7 @@ const PokemonForm: FunctionComponent<Props> = ({ pokemon, isEditForm }) => {
           picture: { value: form.picture.value, error: "L'url n'est pas valide.", isValid: false },
         };
       } else {
-        return { ...correctValidator, value: form.picture.value };
+        newForm = { ...newForm, picture: { value: form.picture.value, error: '', isValid: true } };
       }
     }
 
@@ -105,10 +104,12 @@ const PokemonForm: FunctionComponent<Props> = ({ pokemon, isEditForm }) => {
 
     const validatorCP = !/^[0-9]{1,2}$/.test(form.cp.value)
       ? { value: form.cp.value, error: 'Les dégâts du pokémon sont compris entre 0 et 99', isValid: false }
-      : { ...correctValidator, value: form.hp.value };
+      : { ...correctValidator, value: form.cp.value };
 
     newForm = { ...newForm, ...{ name: validatorName, hp: validatorHP, cp: validatorCP } };
     setForm(newForm);
+
+    const validEditForm = newForm.name.isValid && newForm.hp.isValid && newForm.cp.isValid;
 
     return isEditForm ? validateForm : validEditForm && newForm.picture.isValid;
   };
